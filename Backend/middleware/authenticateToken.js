@@ -39,9 +39,13 @@ function getSecretKey(privilege, type) {
  */
 function authenticateToken(requiredPrivilege = null) {
     return (req, res, next) => {
-        const accessToken = req.cookies.accessToken;
+        const accessToken = req.cookies?.accessToken;
+        console.log(accessToken);
         if (!accessToken) {
-            return res.status(401).json({ message: "No access token provided" });
+            // return res.status(401).json({ message: "No access token provided" });
+            console.log("no access token provided so refreshing")
+            return refreshAccessToken(req,res,next);
+            
         }
 
         const decoded = jwt.decode(accessToken);
@@ -56,9 +60,10 @@ function authenticateToken(requiredPrivilege = null) {
 
         jwt.verify(accessToken, secretKey, async (err, user) => {
             if (err) {
-                if (err.name === "TokenExpiredError") {
-                    return refreshAccessToken(req, res, next);
-                }
+                // if (err.name === "TokenExpiredError") {
+                //     console.log("token expired")
+                //     return refreshAccessToken(req, res, next);
+                // }
                 return res.status(403).json({ message: "Invalid access token" });
             }
 
@@ -78,7 +83,7 @@ function authenticateToken(requiredPrivilege = null) {
 function refreshAccessToken(req, res, next) {
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) {
-        return res.status(401).json({ message: "No refresh token provided" });
+        return res.status(401).json({ message: "No refresh token provided . Please log in again" });
     }
 
     const decoded = jwt.decode(refreshToken);

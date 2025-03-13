@@ -97,6 +97,13 @@ app.post("/login", async (req, res) => {
     }
 });
 
+app.post("/logout", (req, res) => {
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+    return res.status(200).json({ message: "Logged out successfully" });
+});
+  
+
 app.get("/restricted", authenticateToken(), (req, res) => {
     res.json({ message: "Welcome to the Area 51!", user: req.user });
 });
