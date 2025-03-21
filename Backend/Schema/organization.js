@@ -14,20 +14,23 @@ const Organization=mongoose.Schema({
         type:String,
         required:true,
     },
-    price:{
+    price:{ //credits
         type:Number,
         required:true,
     },
-    pocket:{
+    pocket:{ //wallet
         type:Number,
         required:true,
     },
-    privilige:{
+    privilige:{ //array like
         type:String,
         required:true,
-    },
+    },//organization owned prod array liek obejct 
 })
 
 const org_schema=mongoose.model("organization",Organization);
 
 module.exports=org_schema
+
+// product schema 
+//servies price  info_about  content 

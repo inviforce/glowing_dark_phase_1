@@ -27,7 +27,7 @@ const admin_reg = async (req, res) => {
     // Read the hash from the file
     let fileHash;
     try {
-      fileHash = await fs.readFile('./Register/checker.txt', 'utf8');
+      fileHash = await fs.readFile('./Register_Login/checker.txt', 'utf8');
     } catch (err) {
       console.error('Error reading the hash file:', err.message);
       return res.status(500).json({ error: "Internal server error" });

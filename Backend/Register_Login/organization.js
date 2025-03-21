@@ -13,7 +13,7 @@ const Organization_reg = async (req, res) => {
     const { name, email, password, price, privilige } = req.body;
 
     // Validate fields
-    if (!name || !email || !password || !omni_id || !privilige) {
+    if (!name || !email || !password || !privilige || !price) {
       return res.status(400).json({ error: "All fields are required" });
     }
 
@@ -31,16 +31,19 @@ const Organization_reg = async (req, res) => {
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
-    price=Number(price)
+    const numericPrice = Number(price);
+
     // Save new Organization
+    let pocket=0;
     const newOrganization = new Organization({
       name,
       email,
       password: hashedPassword,
-      price,
-      pocket:0,
+      price: numericPrice,
+      pocket,
       privilige,
     });
+    
 
     await newOrganization.save();
     return res.status(201).json({ message: "Organization registered successfully" });

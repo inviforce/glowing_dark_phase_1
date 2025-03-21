@@ -23,3 +23,5 @@ const Counselor=mongoose.Schema({
 const couns_schema=mongoose.model("Counselor",Counselor);
 
 module.exports=couns_schema
+
+//case std id

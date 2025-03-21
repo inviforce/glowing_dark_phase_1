@@ -41,3 +41,6 @@ const Student=mongoose.Schema({
 const student_schema=mongoose.model("Student",Student);
 
 module.exports=student_schema
+
+//report of student  adn purchsed  and organitaion _ email   primary key  
+// not seen by student (raw comment )  also store   (visibility-feature)

@@ -18,22 +18,22 @@ const CsrSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  manager: {
+  manager: {  //will  be removed
     type: Boolean,
     required: true,
     default: false,
   },
-  privilige:{
+  privilige:{// array all
     type:String,
     required:true,
   },
-  storeId: {
+  storeId: { //manager_id
     type: mongoose.Schema.Types.ObjectId,
     ref: "Csr",
     required: function() {
       return this.manager; 
     }
-  },
+  }, // state active student info (cases) array of object organization====studnet
 });
 
 const Csr = mongoose.model("Csr", CsrSchema);

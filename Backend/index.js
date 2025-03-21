@@ -61,7 +61,7 @@ app.post("/register", async (req, res) => {
     
     if (privilige === "CSR") {
       // Authenticate with "ORGANIZATION" privilege
-      await authenticateToken("ORGANIZATION")(req, res, async () => {
+      await authenticateToken("ADMIN")(req, res, async () => {
         return await csr_reg(req, res); // Call the CSR function
       });
       return;
@@ -81,7 +81,7 @@ app.post("/register", async (req, res) => {
       return;
     }
 
-    if (privilige === "COUNSELOR") {
+    if (privilige === "COUNSELOR") { //array like
       await authenticateToken("ADMIN")(req, res, async () => {
         return await Counselor_reg(req, res);
       });
