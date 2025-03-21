@@ -13,7 +13,7 @@ function createAccessToken(userid, privilege) {
         throw new Error("Invalid privilege type");
     }
 
-    return sign({ userid, privilege }, secretKey, { expiresIn: "1m" }); // 1-minute expiration
+    return sign({ userid, privilege }, secretKey, { expiresIn: "10m" }); // 1-minute expiration
 }
 
 function createRefreshToken(userid, privilege) {
@@ -39,7 +39,7 @@ function sendAccessToken(res, accessToken) {
             secure: true,   // Use HTTPS in production
             sameSite: "Lax", // Prevent CSRF but allow same-site requests
             path: "/",
-            expires: new Date(Date.now() + 15*60 * 1000), // Expire in 1 minute
+            expires: new Date(Date.now() + 20*60 * 1000), // Expire in 1 minute
         });
     } catch (error) {
         console.error("❌ Error sending access token:", error);
