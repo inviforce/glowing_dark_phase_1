@@ -49,34 +49,54 @@ mongoose.connect("mongodb://127.0.0.1:27017/power_play", {
 .catch(err => console.error("❌ MongoDB Connection Error:", err));
 
 app.post("/register", async (req, res) => {
-    try {
-      const { privilige } = req.body;
-      if (!privilige) {
-        return res.status(400).json({ error: "All fields are required" });
-      }
-  
-      if (privilige === "ADMIN") {
-        return await admin_reg(req, res); // Call the admin function
-      }
-      if (privilige === "CSR") {
-        return await csr_reg(req, res); // Call the admin function
-      }
-      if(privilige==="ORGANIZATION"){
-        return await Organization_reg(req,res);
-      }
-      if(privilige==="STUDENT"){
-        return await Student_reg(req,res);
-      }
-      if(privilige==="COUNSELOR"){
-        return await Counselor_reg(req,res);
-      }
-      return res.status(403).json({ error: "Unauthorized privilege" });
-  
-    } catch (error) {
-      console.error(`Error: ${error}`);
-      return res.status(500).json({ message: "Server error, please try again" });
+  try {
+    const { privilige } = req.body;
+    if (!privilige) {
+      return res.status(400).json({ error: "All fields are required" });
     }
-  });
+
+    if (privilige === "ADMIN") {
+      return await admin_reg(req, res); // Call the Admin function without authentication
+    }
+    
+    if (privilige === "CSR") {
+      // Authenticate with "ORGANIZATION" privilege
+      await authenticateToken("ORGANIZATION")(req, res, async () => {
+        return await csr_reg(req, res); // Call the CSR function
+      });
+      return;
+    }
+    
+    if (privilige === "ORGANIZATION") {
+      await authenticateToken("ADMIN")(req, res, async () => {
+        return await Organization_reg(req, res);
+      });
+      return;
+    }
+    
+    if (privilige === "STUDENT") {
+      await authenticateToken("ORGANIZATION")(req, res, async () => {
+        return await Student_reg(req, res);
+      });
+      return;
+    }
+
+    if (privilige === "COUNSELOR") {
+      await authenticateToken("ADMIN")(req, res, async () => {
+        return await Counselor_reg(req, res);
+      });
+      return;
+    }
+
+    return res.status(403).json({ error: "Unauthorized privilege" });
+
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+    return res.status(500).json({ message: "Server error, please try again" });
+  }
+});
+
+
 
   
 // User Login
